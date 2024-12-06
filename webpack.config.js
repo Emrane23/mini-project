@@ -1,5 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
-const webpack = require('webpack'); // Importez webpack
+const webpack = require('webpack'); 
 
 Encore
     .setOutputPath('public/build/')
@@ -8,7 +8,7 @@ Encore
     // Ajoutez vos fichiers CSS et JS comme avant
     .addStyleEntry('bo-styles', './assets/styles/BO/css/sb-admin-2.min.css')
     .addEntry('bo-scripts', [
-        './assets/styles/BO/vendor/jquery/jquery.min.js',  // jQuery doit être en premier
+        './assets/styles/BO/vendor/jquery/jquery.min.js',
         './assets/styles/BO/vendor/bootstrap/js/bootstrap.bundle.min.js',
         './assets/styles/BO/vendor/jquery-easing/jquery.easing.min.js',
         './assets/styles/BO/js/sb-admin-2.min.js',
