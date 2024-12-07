@@ -8,14 +8,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    use Timestampable ;
+    use Timestampable;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -60,6 +64,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $progression = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avatar = null;
+
+    #[Vich\UploadableField(mapping: 'user_avatar', fileNameProperty: 'avatar')]
+    private ?File $avatarFile = null;
 
     public function getId(): ?int
     {
@@ -134,6 +144,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function setAvatarFile(?File $avatarFile = null): void
+    {
+        $this->avatarFile = $avatarFile;
+
+        if ($avatarFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function getAvatarUrl(): string
+    {
+        if ($this->avatar) {
+            return '/uploads/avatars/' . $this->avatar;
+        }
+
+        return sprintf('https://ui-avatars.com/api/?name=%s+%s&size=40', urlencode($this->getName()), urlencode($this->getLastName()));
     }
 
     public function getName(): ?string
@@ -230,5 +273,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->progression = $progression;
 
         return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->getName() . ' ' . $this->getLastName();
     }
 }
