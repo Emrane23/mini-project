@@ -1,56 +1,79 @@
 <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
-    <div class="container d-flex justify-content-between align-items-center">
-        <a class="navbar-brand h1" href="{{ path('app_home') }}">
-            <i class='bx bx-buildings bx-sm text-dark'></i>
-            <span class="text-dark h4">Purple</span>
-            <span class="text-primary h4">Buzz</span>
-        </a>
+	<div class="container d-flex justify-content-between align-items-center">
+		<a class="navbar-brand h1" href="{{ path('app_home') }}">
+            <img src="{{ asset('build/images/logo.png') }}" alt="Logo" style="height: 50px; margin-right: 8px;">
+			<span class="text-dark h4">E-</span>
+			<span class="text-primary h4">Learning</span>
+		</a>
 
-        <!-- Toggle Button for Mobile -->
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+		<!-- Toggle Button for Mobile -->
+		<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-        <div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="navbar-toggler-success">
-            <div class="flex-fill mx-xl-5 mb-2">
-                <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
-                    <li class="nav-item">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="{{ path('app_about') }}">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="">Work</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-outline-primary rounded-pill px-3" href="{{ path('app_contact') }}">Contact</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- Account Dropdown -->
-            <div class="navbar align-self-center d-flex">
-                <div class="dropdown">
-                    <a class="nav-link d-flex align-items-center dropdown-toggle" href="#" id="customAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('build/images/undraw_profile.svg')}}" alt="User Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                        <span class="d-none d-lg-inline text-primary fw-bold">John Doe</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customAccountDropdown">
-                        <li>
-                            <div class="dropdown-header text-center">
-                                <img src="{{ asset('build/images/undraw_profile.svg')}}" alt="User Avatar Large" class="rounded-circle mb-2" style="width: 50px; height: 50px;">
-                                <h6 class="mb-0">John Doe</h6>
-                                <small class="text-muted">john.doe@example.com</small>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/profile"><i class="bx bx-user me-2"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="/settings"><i class="bx bx-cog me-2"></i> Settings</a></li>
-                        <li>
-                            <form method="POST" action="/logout" class="d-inline">
-                                <button class="dropdown-item" type="submit"><i class="bx bx-log-out me-2"></i> Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+		<div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="navbar-toggler-success">
+			<div class="flex-fill mx-xl-5 mb-2">
+				<ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+					<li class="nav-item">
+						<a class="nav-link btn-outline-primary rounded-pill px-3" href="{{ path('app_about') }}">About</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link btn-outline-primary rounded-pill px-3" href="">Work</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link btn-outline-primary rounded-pill px-3" href="{{ path('app_contact') }}">Contact</a>
+					</li>
+				</ul>
+			</div>
+			<!-- Account Dropdown -->
+			<div class="navbar align-self-center d-flex">
+				<div class="dropdown">
+					{% if app.user %}
+						<a class="nav-link d-flex align-items-center dropdown-toggle" href="#" id="customAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="{{ asset('build/images/undraw_profile.svg')}}" alt="User Avatar" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+							<span class="d-none d-lg-inline text-primary fw-bold">John Doe</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customAccountDropdown">
+							<li>
+								<div class="dropdown-header text-center">
+									<img src="{{ asset('build/images/undraw_profile.svg')}}" alt="User Avatar Large" class="rounded-circle mb-2" style="width: 50px; height: 50px;">
+									<h6 class="mb-0">John Doe</h6>
+									<small class="text-muted">john.doe@example.com</small>
+								</div>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<a class="dropdown-item" href="/profile">
+									<i class="bx bx-user me-2"></i>
+									Profile</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="/settings">
+									<i class="bx bx-cog me-2"></i>
+									Settings</a>
+							</li>
+							<li>
+								<form method="POST" action="/logout" class="d-inline">
+									<button class="dropdown-item" type="submit">
+										<i class="bx bx-log-out me-2"></i>
+										Logout</button>
+								</form>
+							</li>
+						</ul>
+					{% else %}
+						<a class="nav-link d-flex align-items-center dropdown-toggle" href="#" id="customAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class='bx bx-user-circle bx-sm text-primary'></i>
+						</a>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customAccountDropdown">
+						<li>
+							<a class="dropdown-item" href="{{ path('app_login') }}">
+								<i class="bx bx-user me-2"></i>
+								Sign in</a>
+						</li>
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div></nav>
