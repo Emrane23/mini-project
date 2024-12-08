@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
@@ -26,6 +28,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    #[Assert\Length(max: 180)]
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -38,36 +43,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[Assert\NotBlank(groups: ['creation'],message: ('Password is required for user creation.'))]
+    #[Assert\Length(min: 8, max: 255, groups: ['creation'])]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255)]
     private ?string $last_name = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Regex('/^[0-9]{8}$/', message: 'The phone number must contain exactly 8 digits.')]
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 
+    #[Assert\NotBlank(groups: ['teacher'])]
+    #[Assert\Choice(choices: ['informatique', 'telecommunication', 'GC'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $departement = null;
 
+    #[Assert\NotBlank(groups: ['teacher'])]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $speciality = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $cv = null;
 
+    #[Assert\NotBlank(groups: ['student'])]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(nullable: true)]
-    private ?array $skills = null;
+    private ?string $skills = null;
 
+    #[Assert\NotBlank(groups: ['student'])]
+    #[Assert\Length(max: 255)]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $progression = null;
+
+    
+    #[Assert\File(maxSize: '5M', mimeTypes: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'], groups: ['student'])]
+    #[Vich\UploadableField(mapping: 'user_cvs', fileNameProperty: 'cv')]
+    private ?File $cvFile = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $avatar = null;
 
+    #[Assert\File(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png'])]
     #[Vich\UploadableField(mapping: 'user_avatar', fileNameProperty: 'avatar')]
     private ?File $avatarFile = null;
 
@@ -86,6 +113,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function setCvFile(?File $cvFile = null): void
+    {
+        $this->cvFile = $cvFile;
+
+        if ($cvFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getCvFile(): ?File
+    {
+        return $this->cvFile;
     }
 
     /**
@@ -130,7 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -179,12 +220,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return sprintf('https://ui-avatars.com/api/?name=%s+%s&size=40', urlencode($this->getName()), urlencode($this->getLastName()));
     }
 
+    public function getCvUrl(): string
+    {
+        if ($this->cv) {
+            return '/uploads/cvs/' . $this->cv;
+        }
+
+        return '';
+    }
+
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -196,7 +246,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->last_name;
     }
 
-    public function setLastName(string $last_name): static
+    public function setLastName(?string $last_name): static
     {
         $this->last_name = $last_name;
 
@@ -251,12 +301,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSkills(): ?array
+    public function getSkills(): ?string
     {
         return $this->skills;
     }
 
-    public function setSkills(?array $skills): static
+    public function setSkills(?string $skills): static
     {
         $this->skills = $skills;
 
@@ -275,8 +325,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function hasCv(): bool
+    {
+        return !empty($this->cv);
+    }
+
     public function getFullName(): ?string
     {
         return $this->getName() . ' ' . $this->getLastName();
+    }
+
+     #[Assert\Callback(groups: ['student'])]
+    public function validateCvFile(ExecutionContextInterface $context): void
+    {
+        if (in_array('ROLE_STUDENT', $this->getRoles()) && !$this->cv && !$this->cvFile) {
+            $context->buildViolation('Please upload a CV.')
+                ->atPath('cvFile')
+                ->addViolation();
+        }
     }
 }

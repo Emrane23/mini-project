@@ -1,0 +1,86 @@
+{{ form_start(form, {'attr': {'id': 'user-form'}}) }}
+    
+    <div class="mb-3">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.name) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.last_name) }}
+        {{ form_widget(form.last_name, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.last_name) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.phone) }}
+        {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.phone) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.password) }}
+        <br><small>Leave empty to keep the same</small>
+        {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.password) }}
+    </div>
+
+    <div class="mb-3">
+        <div class="mb-3">
+            {{ form_label(form.roles) }}
+            {{ form_widget(form.roles) }}
+            {{ form_errors(form.roles) }}
+        </div>
+    </div>
+
+    <div id="teacher-fields" class="role-fields d-none">
+        <div class="mb-3">
+            {{ form_label(form.departement) }}
+            {{ form_widget(form.departement, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.departement) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.speciality) }}
+            {{ form_widget(form.speciality, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.speciality) }}
+        </div>
+    </div>
+
+    <div id="student-fields" class="role-fields d-none">
+        <div class="mb-3">
+            {{ form_label(form.cvFile) }}
+            <small>Leave empty to keep the existing CV.</small>
+            {{ form_widget(form.cvFile, {'attr': {'class': 'form-control', 'accept': '.pdf,.doc,.docx'}}) }}
+            {{ form_errors(form.cvFile) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.skills) }}
+            {{ form_widget(form.skills, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.skills) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.progression) }}
+            {{ form_widget(form.progression, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.progression) }}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.avatarFile) }}
+        {{ form_widget(form.avatarFile, {'attr': {'class': 'form-control', 'accept': '.jpg,.jpeg,.png'}}) }}
+        {{ form_errors(form.avatarFile) }}
+    </div>
+
+    <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+    <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Back to list</a>
+    
+    {{ form_end(form) }}

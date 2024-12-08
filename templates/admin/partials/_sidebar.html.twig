@@ -20,7 +20,7 @@ class="sidebar-divider my-0">
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-	<a class="nav-link" href="">
+	<a class="nav-link" href="{{path('app_home_dashboard') }}">
 		<i class="fas fa-fw fa-tachometer-alt"></i>
 		<span>Dashboard</span>
 	</a>
@@ -44,7 +44,7 @@ class="sidebar-divider">
 	<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 		<div class="bg-white py-2 collapse-inner rounded">
 			<h6 class="collapse-header">Pages:</h6>
-			<a class="collapse-item" href="">Users <i class="fas fa-users fa-sm"></i></a>
+			<a class="collapse-item" href="{{ path('app_user_index') }}">Users <i class="fas fa-users fa-sm"></i></a>
 		</div>
 	</div>
 </li>

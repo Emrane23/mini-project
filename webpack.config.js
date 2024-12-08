@@ -7,7 +7,9 @@ Encore
 
     // BackOffice (BO)
     .addStyleEntry('bo-styles', './assets/styles/BO/css/sb-admin-2.min.css')
+    .addEntry('user-form', './assets/js/user-form.js')
     .addEntry('bo-scripts', [
+        './assets/js/app.js',
         './assets/styles/BO/vendor/jquery/jquery.min.js',
         './assets/styles/BO/vendor/bootstrap/js/bootstrap.bundle.min.js',
         './assets/styles/BO/vendor/jquery-easing/jquery.easing.min.js',
