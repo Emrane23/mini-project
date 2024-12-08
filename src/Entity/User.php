@@ -344,4 +344,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 ->addViolation();
         }
     }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'roles' => $this->roles,
+            'password' => $this->password,
+            'name' => $this->name,
+            'last_name' => $this->last_name,
+            'phone' => $this->phone,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->roles = $data['roles'];
+        $this->password = $data['password'];
+        $this->name = $data['name'];
+        $this->last_name = $data['last_name'];
+        $this->phone = $data['phone'];
+    }
 }
