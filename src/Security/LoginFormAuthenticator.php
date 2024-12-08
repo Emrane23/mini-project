@@ -45,6 +45,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $request->getSession()->getFlashBag()->add('success', 'Welcome '. $token->getUser()->getFullName().'!' );
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
@@ -59,10 +61,10 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        // $request->getSession()->getFlashBag()->add(
-        //    'error',
-        //    'You need to Log In first!'
-        // );
+        $request->getSession()->getFlashBag()->add(
+           'error',
+           'You need to Log In first!'
+        );
         $url = $this->getLoginUrl($request);
 
         return new RedirectResponse($url);

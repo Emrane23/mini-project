@@ -44,6 +44,7 @@ final class UserController extends AbstractController
             }
             $entityManager->persist($user);
             $entityManager->flush();
+            $this->addFlash('success', 'Created Successfully');
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -78,6 +79,7 @@ final class UserController extends AbstractController
                 );
             }
             $entityManager->flush();
+            $this->addFlash('success', 'Updated Successfully');
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -95,6 +97,8 @@ final class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
+        $this->addFlash('info', 'Deleted Successfully');
+
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
