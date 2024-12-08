@@ -6,10 +6,13 @@ Encore
     .setPublicPath('/build')
 
     // BackOffice (BO)
-    .addStyleEntry('bo-styles', './assets/styles/BO/css/sb-admin-2.min.css')
-    .addStyleEntry('global', './assets/styles/app.scss') // Fichier principal SCSS
+    .addStyleEntry('bo-styles',[ 
+        './assets/styles/BO/css/sb-admin-2.min.css',
+        '/assets/styles/BO/vendor/fontawesome-free/css/all.min.css'
+    ])
+    .addStyleEntry('global', './assets/styles/app.scss') 
     .addEntry('user-form', './assets/js/user-form.js')
-    .addEntry('global-js', '/assets/js/app.js')
+    .addEntry('app', '/assets/js/app.js')
     .addEntry('bo-scripts', [
         './assets/styles/BO/vendor/jquery/jquery.min.js',
         './assets/styles/BO/vendor/bootstrap/js/bootstrap.bundle.min.js',

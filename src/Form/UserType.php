@@ -98,7 +98,6 @@ class UserType extends AbstractType
         ));
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            /** @var User $user */
             $user = $event->getData();
             $form = $event->getForm();
 

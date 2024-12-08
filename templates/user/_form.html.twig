@@ -84,6 +84,10 @@
     </div>
 
     <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
-    <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Back to list</a>
+    {% if isOwnProfile  %}
+		<a href="{{ path('app_home_dashboard') }}" class="btn btn-secondary ">Back to Home</a>
+	{% else %}
+		<a href="{{ path('app_user_index') }}" class="btn btn-secondary mt-3">Back to list</a>
+	{% endif %}
     
     {{ form_end(form) }}
