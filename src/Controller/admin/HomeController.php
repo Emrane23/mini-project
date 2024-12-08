@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin')]
 class HomeController extends AbstractController
 {
-    #[Route( name: 'app_home_dashboard')]
+    #[Route(name: 'app_home_dashboard')]
     public function index(): Response
     {
         return $this->render('admin/home.html.twig');

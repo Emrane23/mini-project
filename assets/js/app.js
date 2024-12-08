@@ -6,6 +6,15 @@ import '../bootstrap.js';
  * which should already be in your base.html.twig.
  */
 import '../styles/app.scss';
+import toastr from 'toastr';
+
+toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: "toast-top-right",
+};
+window.toastr = toastr;
+
 
 $('.custom-file-input').on('change', function (event) {
     var inputFile = event.currentTarget ;
