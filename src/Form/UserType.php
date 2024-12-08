@@ -25,12 +25,15 @@ class UserType extends AbstractType
         $builder
             ->add('name', null, [
                 'label' => 'First Name',
+                'attr' => ['placeholder' => 'Enter the first name...'],
             ])
             ->add('last_name', null, [
                 'label' => 'Last Name',
+                'attr' => ['placeholder' => 'Enter the last name...'],
             ])
             ->add('phone', null, [
                 'label' => 'Phone Number',
+                'attr' => ['placeholder' => 'Enter the phone number...'],
             ])
             ->add('roles', ChoiceType::class, [
                 'choices' => [
@@ -60,10 +63,12 @@ class UserType extends AbstractType
                 ],
                 'required' => false,
                 'label' => 'Department',
+                'attr' => ['placeholder' => 'Select the department...'],
             ])
             ->add('speciality', null, [
                 'required' => false,
                 'label' => 'Speciality',
+                'attr' => ['placeholder' => 'Enter the speciality...'],
             ])
             ->add('cvFile', VichFileType::class, [
                 'label' => 'Curriculum Vitae (PDF, DOC)',
@@ -75,22 +80,25 @@ class UserType extends AbstractType
             ->add('skills', null, [
                 'required' => false,
                 'label' => 'Skills',
+                'attr' => ['placeholder' => 'List the skills...'],
             ])
             ->add('progression', null, [
                 'required' => false,
                 'label' => 'Progression',
+                'attr' => ['placeholder' => 'Describe the progression...'],
             ]);
 
         if (!($options['exclude_email_password'])) {
             $builder
-                ->add('email', EmailType::class)
+                ->add('email', EmailType::class, [
+                    'attr' => ['placeholder' => 'Enter the email address...'],
+                ])
                 ->add('password', PasswordType::class, [
                     'required' => false,
                     'mapped' => false,
                     'label' => 'Password',
                 ]);
         }
-
 
         $builder->get('roles')->addModelTransformer(new CallbackTransformer(
             fn($roles) => $roles[0] ?? null,
