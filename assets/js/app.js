@@ -10,7 +10,7 @@ import toastr from 'toastr';
 
 toastr.options = {
     closeButton: true,
-    progressBar: true,
+    progressBar: false,
     positionClass: "toast-top-right",
 };
 window.toastr = toastr;

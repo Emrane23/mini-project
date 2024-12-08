@@ -211,13 +211,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->avatar;
     }
 
-    public function getAvatarUrl(): string
+    public function getAvatarUrl($size=40): string
     {
         if ($this->avatar) {
             return '/uploads/avatars/' . $this->avatar;
         }
 
-        return sprintf('https://ui-avatars.com/api/?name=%s+%s&size=40', urlencode($this->getName()), urlencode($this->getLastName()));
+        return sprintf("https://ui-avatars.com/api/?name=%s+%s&size=$size", urlencode($this->getName()), urlencode($this->getLastName()));
     }
 
     public function getCvUrl(): string

@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -28,9 +29,6 @@ class UserType extends AbstractType
             ->add('last_name', null, [
                 'label' => 'Last Name',
             ])
-            ->add('email', null, [
-                'label' => 'Email Address',
-            ])
             ->add('phone', null, [
                 'label' => 'Phone Number',
             ])
@@ -45,11 +43,6 @@ class UserType extends AbstractType
                 'constraints' => [
                     new NotBlank(message: 'Please select a role.'),
                 ],
-            ])
-            ->add('password', PasswordType::class, [
-                'required' => false,
-                'mapped' => false,
-                'label' => 'Password',
             ])
             ->add('avatarFile', VichImageType::class, [
                 'label' => 'Profile Image (JPG/PNG)',
@@ -88,6 +81,17 @@ class UserType extends AbstractType
                 'label' => 'Progression',
             ]);
 
+        if (!($options['exclude_email_password'])) {
+            $builder
+                ->add('email', EmailType::class)
+                ->add('password', PasswordType::class, [
+                    'required' => false,
+                    'mapped' => false,
+                    'label' => 'Password',
+                ]);
+        }
+
+
         $builder->get('roles')->addModelTransformer(new CallbackTransformer(
             fn($roles) => $roles[0] ?? null,
             fn($role) => [$role]
@@ -117,11 +121,12 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'exclude_email_password' => false, 
             'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
                 if ($data instanceof User) {
                     if (null === $data->getId()) {
-                        return ['Default', 'creation']; 
+                        return ['Default', 'creation'];
                     }
                     if (in_array('ROLE_TEACHER', $data->getRoles())) {
                         return ['Default', 'teacher'];

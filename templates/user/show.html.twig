@@ -1,78 +1,69 @@
-<!DOCTYPE html>
+{% extends 'layouts/admin/base.html.twig' %}
 
-<title>User</title>
+{% block title %}
+	{{ user.fullname}}
+{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+	<h1>{{ isOwnProfile ? 'Profil' : 'User Details' }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
-            </tr>
-            <tr>
-                <th>Last_name</th>
-                <td>{{ user.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ user.phone }}</td>
-            </tr>
-            <tr>
-                <th>Departement</th>
-                <td>{{ user.departement }}</td>
-            </tr>
-            <tr>
-                <th>Speciality</th>
-                <td>{{ user.speciality }}</td>
-            </tr>
-            <tr>
-                <th>Cv</th>
-                <td>{{ user.cv }}</td>
-            </tr>
-            <tr>
-                <th>Skills</th>
-                <td>{{ user.skills ? user.skills|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Progression</th>
-                <td>{{ user.progression }}</td>
-            </tr>
-            <tr>
-                <th>Avatar</th>
-                <td>{{ user.avatar }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<div class="card">
+		<div class="card-header">
+			<h3>{{ user.fullname }}</h3>
+		</div>
+		<div class="card-body">
+			<p>
+				<strong>Email:</strong>
+				{{ user.email }}</p>
+			<p>
+				<strong>Phone:</strong>
+				{{ user.phone }}</p>
+			<p>
+				<strong>Role:</strong>
+				{% set displayedRoles = user.roles|filter(role => role != 'ROLE_USER') %}
+				{% for role in displayedRoles %}
+					{{ role_badge(role) }}
+				{% endfor %}
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+				{% if 'ROLE_TEACHER' in user.roles %}
+					<p>
+						<strong>Department:</strong>
+						{{ user.departement }}</p>
+					<p>
+						<strong>Speciality:</strong>
+						{{ user.speciality }}</p>
+				{% elseif 'ROLE_STUDENT' in user.roles %}
+					<p>
+						<strong>CV:</strong>
+						{% if user.cv %}
+							<a href="{{ asset('uploads/cvs/' ~ user.cv) }}" target="_blank">Download CV</a>
+						{% else %}
+							Not uploaded
+						{% endif %}
+					</p>
+					<p>
+						<strong>Skills:</strong>
+						{{ user.skills }}</p>
+					<p>
+						<strong>Progression:</strong>
+						{{ user.progression }}</p>
+				{% endif %}
+			</p>
+			<p>
+				<strong>Avatar:</strong>
+			</p>
+			{% if user.avatar %}
+				<img class="img-profile " src="{{ user.getAvatarUrl | imagine_filter('squared_thumbnail_small') }}" alt="{{ app.user.name }}">
+			{% else %}
+				<img class="img-profile rounded-circle" src="{{ user.getAvatarUrl(150) }}" alt="{{ app.user.name }}">
+			{% endif %}
+		</div>
+	</div>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+	{% if isOwnProfile  %}
+		<a href="{{ path('app_home_dashboard') }}" class="btn btn-secondary mt-3">Back to Home</a>
+		<a href="{{ path('app_user_edit', {id: app.user.id}) }}" class="btn btn-info mt-3">Edit Profile</a>
+	{% else %}
+		<a href="{{ path('app_user_index') }}" class="btn btn-secondary mt-3">Back to list</a>
+	{% endif %}
 {% endblock %}
