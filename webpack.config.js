@@ -12,6 +12,7 @@ Encore
     ])
     .addStyleEntry('global', './assets/styles/app.scss') 
     .addEntry('user-form', './assets/js/user-form.js')
+    .addEntry('stat', './assets/js/stat.js')
     .addEntry('app', '/assets/js/app.js')
     .addEntry('bo-scripts', [
         './assets/styles/BO/vendor/jquery/jquery.min.js',
