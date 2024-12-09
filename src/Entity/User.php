@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[Assert\NotBlank(groups: ['creation'],message: ('Password is required for user creation.'))]
+
     #[Assert\Length(min: 8, max: 255, groups: ['creation'])]
     #[ORM\Column]
     private ?string $password = null;

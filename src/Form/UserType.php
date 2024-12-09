@@ -97,6 +97,12 @@ class UserType extends AbstractType
                     'required' => false,
                     'mapped' => false,
                     'label' => 'Password',
+                    'constraints' => [
+                        new NotBlank([
+                            'groups' => ['creation'],
+                            'message' => 'Password is required for user creation.',
+                        ]),
+                    ],
                 ]);
         }
 
@@ -128,7 +134,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'exclude_email_password' => false, 
+            'exclude_email_password' => false,
             'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
                 if ($data instanceof User) {
