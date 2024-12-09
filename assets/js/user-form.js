@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const studentFields = document.getElementById('student-fields');
     const allFields = document.querySelectorAll('.role-fields .form-control');
 
-    // Function to clear and update required fields
     const clearFields = (container) => {
         if (!container) return;
         const inputs = container.querySelectorAll('input, select, textarea');
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Function to set fields required based on role
     const setFieldsRequired = (container, required) => {
         const inputs = container.querySelectorAll('input, select, textarea');
         inputs.forEach(input => {
@@ -34,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', () => {
             const selectedRole = radio.value;
 
-            // Reset all fields' required attributes and values
             allFields.forEach(field => field.removeAttribute('required'));
 
             if (selectedRole === 'ROLE_TEACHER') {
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Trigger role-based field visibility and required field handling on page load
     const selectedRole = document.querySelector('[name="user[roles]"]:checked');
     if (selectedRole) {
         selectedRole.dispatchEvent(new Event('change'));
